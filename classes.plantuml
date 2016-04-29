@@ -1,0 +1,524 @@
+@startuml
+top to bottom direction
+skinparam headerFontSize 30
+skinparam headerFontStyle bold
+skinparam classAttributeIconSize 0
+scale 1.0
+package com.company.controller {
+interface com.company.controller.Observer  {
+.. Methods ..
++ {abstract} handleEvent(Object, Map) : void
+}
+interface com.company.controller.Observable  {
+.. Methods ..
++ {abstract} addObserver(Observer) : void
++ {abstract} notifyObservers(Object, Map) : void
++ {abstract} removeObserver(Observer) : void
+}
+interface com.company.controller.Interacting  {
+.. Methods ..
++ {abstract} createLoginDialog() : void
++ {abstract} updateCellValue(Map) : void
+}
+class com.company.controller.DbHelper {
+.. Fields  ..
+.. Methods ..
+~doTablesExist() : boolean
++getConn() : Connection
+~readResource(Class, String) : String
+.. Static ..
++ {static} closeConnection() : void
++ {static} closeResource() : void
++ {static} getInstance() : DbHelper
+- {static} connection : Connection
+- {static} databaseUrl : String
+- {static} logger : Logger
+- {static} ourInstance : DbHelper
+}
+class com.company.controller.Main {
+.. Methods ..
+.. Static ..
++ {static} main() : void
+}
+class com.company.controller.GuiController {
+.. Fields  ..
+-createNewUserDialog : CreateNewUserDialog
+-loginDialog : LoginDialog
+-mainWindow : MainWindow
+-manager : Manager
+.. Methods ..
++createLoginDialog() : void
+-createMainWindow() : void
+-createNewUser(Map) : void
++handleEvent(Object, Map) : void
+-loginUser(Map) : void
++run() : void
+-runCreateNewUserDialog() : void
++updateCellValue(Map) : void
+}
+
+}
+package com.company.model {
+class com.company.model.Manager {
+.. Fields  ..
+-currentUser : User
+-dbDataStorage : DataStore
+.. Methods ..
++createNewUser(String, String) : boolean
++getAccountByName(String) : Account
++getAccountList() : Set
++getAccountRecords(String) : ArrayList
++getUser(String) : User
++login(String, String) : boolean
++updateRecord(Map) : boolean
+.. Static ..
++ {static} COLUMN1_TITLE : String
++ {static} COLUMN2_TITLE : String
++ {static} COLUMN3_TITLE : String
++ {static} COLUMN4_TITLE : String
++ {static} COLUMN5_TITLE : String
++ {static} getSHA256Hash() : byte[]
++ {static} logger : Logger
+}
+interface com.company.model.DataStore  {
+.. Methods ..
++ {abstract} addAccount(User, Account) : void
++ {abstract} addRecord(Account, Record) : void
++ {abstract} addUser(User) : void
++ {abstract} getAccounts(User) : Set
++ {abstract} getRecordById(int) : Record
++ {abstract} getRecords(Account) : ArrayList
++ {abstract} getUser(String) : User
++ {abstract} getUserNames() : Set
++ {abstract} removeAccount(User, Account) : Account
++ {abstract} removeRecord(Account, Record) : Record
++ {abstract} removeUser(String) : User
++ {abstract} updateRecord(Account, int, Record) : boolean
+}
+class com.company.model.TestApplication {
+.. Methods ..
++testGetSHA256Hash() : void
+}
+class com.company.model.Category {
+.. Fields  ..
+-categoryName : String
+.. Methods ..
++getCategoryName() : String
+}
+class com.company.model.Record {
+.. Fields  ..
+-amount : int
+-category : Category
+-date : Date
+-description : String
+-id : int
+.. Methods ..
++getAmount() : int
++getCategory() : Category
++getDate() : Date
++getDescription() : String
++getId() : int
++setAmount(int) : void
++setCategory(Category) : void
++setDate(Date) : void
++setDescription(String) : void
++setId(int) : void
+}
+class com.company.model.DbDataStorage {
+.. Fields  ..
+-dbHelper : DbHelper
+.. Methods ..
++addAccount(User, Account) : void
++addRecord(Account, Record) : void
++addUser(User) : void
++getAccounts(User) : HashSet
++getRecordById(int) : Record
++getRecords(Account) : ArrayList
++getUser(String) : User
++getUserNames() : Set
++removeAccount(User, Account) : Account
++removeRecord(Account, Record) : Record
++removeUser(String) : User
++updateRecord(Account, int, Record) : boolean
+.. Static ..
+- {static} logger : Logger
+}
+class com.company.model.Account {
+.. Fields  ..
+-balance : int
+-description : String
+-records : ArrayList
+.. Methods ..
++addRecord(Record) : void
++getDescription() : String
++getRecords() : ArrayList
+}
+class com.company.model.User {
+.. Fields  ..
+-accounts : ArrayList
+-name : String
+-passwd : String
+.. Methods ..
++getName() : String
++getPasswd() : String
++setName(String) : void
++setPasswd(String) : void
+}
+
+}
+package com.company.view {
+class com.company.view.expensesTableModel {
+.. Methods ..
+.. Static ..
++ {static} getNewInstance() : expensesTableModel
+}
+class com.company.view.CreateNewUserDialog {
+.. Fields  ..
+-btnCancel : JButton
+-btnCreateOK : JButton
+-contentPane : JPanel
+-lbMessage : JLabel
+-observers : List
+-pfPasswd : JPasswordField
+-pfPasswdCfm : JPasswordField
+-tfUserName : JTextField
+.. Methods ..
++addObserver(Observer) : void
++notifyObservers(Object, Map) : void
+-onCancel(Object) : void
+-onOK(Object) : void
++removeObserver(Observer) : void
++setLbMessage(String) : void
+}
+class com.company.view.MainWindow <<TableModelListener>>  {
+.. Fields  ..
+-mainPanel : JPanel
+-observers : List
+-tablesArray : ArrayList
+-tpAccounts : JTabbedPane
+.. Methods ..
++addObserver(Observer) : void
++notifyObservers(Object, Map) : void
++removeObserver(Observer) : void
++tableChanged(TableModelEvent) : void
+.. Static ..
+- {static} AC_TAB_HEADER : String
+}
+class com.company.view.LoginDialog {
+.. Fields  ..
+-btnCancel : JButton
+-btnCreateNewUser : JButton
+-btnOK : JButton
+-contentPane : JPanel
+-lbMessage : JLabel
+-lbName : JLabel
+-lbPassword : JLabel
+-observers : List
+-strings : HashMap
+-tfName : JTextField
+-tfPasswd : JPasswordField
+.. Methods ..
++addObserver(Observer) : void
++notifyObservers(Object, Map) : void
+-onCancel(Object) : void
+-onCreateNewUser(Object) : void
+-onOK(Object) : void
++removeObserver(Observer) : void
++setLbMessage(String) : void
+}
+
+}
+package com.intellij.uiDesigner.core {
+class com.intellij.uiDesigner.core.GridConstraints <<Cloneable>>  {
+.. Fields  ..
+-myAnchor : int
+-myColSpan : int
+-myColumn : int
+-myFill : int
+-myHSizePolicy : int
+-myIndent : int
++myMaximumSize : Dimension
++myMinimumSize : Dimension
++myPreferredSize : Dimension
+-myRow : int
+-myRowSpan : int
+-myUseParentLayout : boolean
+-myVSizePolicy : int
+.. Methods ..
++clone() : Object
++contains(boolean, int) : boolean
++equals(Object) : boolean
++getAnchor() : int
++getCell(boolean) : int
++getColSpan() : int
++getColumn() : int
++getFill() : int
++getHSizePolicy() : int
++getIndent() : int
++getRow() : int
++getRowSpan() : int
++getSpan(boolean) : int
++getVSizePolicy() : int
++hashCode() : int
++isUseParentLayout() : boolean
++restore(GridConstraints) : void
++setAnchor(int) : void
++setCell(boolean, int) : void
++setColSpan(int) : void
++setColumn(int) : void
++setFill(int) : void
++setHSizePolicy(int) : void
++setIndent(int) : void
++setRow(int) : void
++setRowSpan(int) : void
++setSpan(boolean, int) : void
++setUseParentLayout(boolean) : void
++setVSizePolicy(int) : void
++store() : GridConstraints
++toString() : String
+.. Static ..
++ {static} ALIGN_CENTER : int
++ {static} ALIGN_FILL : int
++ {static} ALIGN_LEFT : int
++ {static} ALIGN_RIGHT : int
++ {static} ANCHOR_CENTER : int
++ {static} ANCHOR_EAST : int
++ {static} ANCHOR_NORTH : int
++ {static} ANCHOR_NORTHEAST : int
++ {static} ANCHOR_NORTHWEST : int
++ {static} ANCHOR_SOUTH : int
++ {static} ANCHOR_SOUTHEAST : int
++ {static} ANCHOR_SOUTHWEST : int
++ {static} ANCHOR_WEST : int
++ {static} EMPTY_ARRAY : GridConstraints[]
++ {static} FILL_BOTH : int
++ {static} FILL_HORIZONTAL : int
++ {static} FILL_NONE : int
++ {static} FILL_VERTICAL : int
++ {static} SIZEPOLICY_CAN_GROW : int
++ {static} SIZEPOLICY_CAN_SHRINK : int
++ {static} SIZEPOLICY_FIXED : int
++ {static} SIZEPOLICY_WANT_GROW : int
+}
+class com.intellij.uiDesigner.core.Spacer {
+.. Methods ..
++getMinimumSize() : Dimension
++getPreferredSize() : Dimension
+}
+abstract class com.intellij.uiDesigner.core.DimensionInfo  {
+.. Fields  ..
+-myCell : int[]
+-myCellSizePolicies : int[]
+-myGap : int
+#myLayoutState : LayoutState
+-mySpan : int[]
+-mySpansAfterElimination : int[]
+-myStretches : int[]
+.. Methods ..
+-calcCellSizePolicy(int) : int
++componentBelongsCell(int, int) : boolean
++getCell(int) : int
++ {abstract} getCellCount() : int
++getCellSizePolicy(int) : int
+-getCellSizePolicyFromInheriting(int) : int
+-getCellSizePolicyImpl(int, ArrayList) : int
+~ {abstract} getChildLayoutCellCount(GridLayoutManager) : int
++getComponent(int) : Component
++getComponentCount() : int
++getConstraints(int) : GridConstraints
++ {abstract} getDimensionInfo(GridLayoutManager) : DimensionInfo
++getGap() : int
+#getMinimumSize(int) : Dimension
++ {abstract} getMinimumWidth(int) : int
+# {abstract} getOriginalCell(GridConstraints) : int
+# {abstract} getOriginalSpan(GridConstraints) : int
+#getPreferredSize(int) : Dimension
++ {abstract} getPreferredWidth(int) : int
+~ {abstract} getSizePolicy(int) : int
++getSpan(int) : int
++getStretch(int) : int
+.. Static ..
++ {static} findAlignedChild() : Container
+}
+class com.intellij.uiDesigner.core.GridLayoutManager <? extends AbstractLayout>  {
+.. Fields  ..
+-myColumnStretches : int[]
+-myHeights : int[]
+~myHorizontalInfo : DimensionInfo
+-myLayoutState : LayoutState
+-myMinCellSize : int
+-myRowStretches : int[]
+-mySameSizeHorizontally : boolean
+-mySameSizeVertically : boolean
+~myVerticalInfo : DimensionInfo
+-myWidths : int[]
+-myXs : int[]
+-myYs : int[]
+.. Methods ..
++addLayoutComponent(Component, Object) : void
+-checkSetSizesFromParent(Container, Insets) : int
++getCellCount(boolean) : int
++getCellSizePolicy(boolean, int) : int
+-getCellsWithHigherPriorities(DimensionInfo, boolean[], boolean[], boolean, int[]) : void
++getColumnCount() : int
++getColumnStretch(int) : int
++getCoords(boolean) : int[]
++getHeights() : int[]
++getHorizontalGridLines() : int[]
+-getMinOrPrefSizes(DimensionInfo, boolean) : int[]
+-getMinSizes(DimensionInfo) : int[]
+-getPrefSizes(DimensionInfo) : int[]
++getRowCount() : int
++getRowStretch(int) : int
++getSizes(boolean) : int[]
+-getTotalGap(Container, DimensionInfo, DimensionInfo) : Dimension
++getVerticalGridLines() : int[]
++getWidths() : int[]
++getXs() : int[]
++getYs() : int[]
++invalidateLayout(Container) : void
++isSameSizeHorizontally() : boolean
++isSameSizeVertically() : boolean
++layoutContainer(Container) : void
++maximumLayoutSize(Container) : Dimension
++minimumLayoutSize(Container) : Dimension
+-new_doIt(int[], int, int, int, DimensionInfo, boolean) : void
++preferredLayoutSize(Container) : Dimension
++setColumnStretch(int, int) : void
++setRowStretch(int, int) : void
++setSameSizeHorizontally(boolean) : void
++setSameSizeVertically(boolean) : void
+~validateInfos(Container) : void
+.. Static ..
++ {static} DESIGN_TIME_INSETS : Object
+- {static} SKIP_COL : int
+- {static} SKIP_ROW : int
+- {static} countGap() : int
+- {static} distribute() : void
+- {static} getDesignTimeInsets() : int
+- {static} getInsets() : Insets
+- {static} getMin2() : int
+- {static} getSameSizes() : int[]
+- {static} isCellEmpty() : boolean
+- {static} makeSameSizes() : void
+- {static} shouldAddGapAfterCell() : boolean
+- {static} sum() : int
+- {static} updateSizesFromChild() : void
+- {static} updateSizesFromChildren() : void
+}
+class com.intellij.uiDesigner.core.HorizontalInfo <? extends DimensionInfo>  {
+.. Methods ..
++getCellCount() : int
+~getChildLayoutCellCount(GridLayoutManager) : int
++getDimensionInfo(GridLayoutManager) : DimensionInfo
++getMinimumWidth(int) : int
+#getOriginalCell(GridConstraints) : int
+#getOriginalSpan(GridConstraints) : int
++getPreferredWidth(int) : int
+~getSizePolicy(int) : int
+}
+class com.intellij.uiDesigner.core.Util {
+.. Fields  ..
+.. Methods ..
+.. Static ..
++ {static} DEFAULT_INDENT : int
++ {static} adjustSize() : void
++ {static} eliminate() : int
++ {static} getMaximumSize() : Dimension
++ {static} getMinimumSize() : Dimension
++ {static} getPreferredSize() : Dimension
+- {static} MAX_SIZE : Dimension
+- {static} getSize() : Dimension
+}
+class com.intellij.uiDesigner.core.VerticalInfo <? extends DimensionInfo>  {
+.. Methods ..
++getCellCount() : int
+~getChildLayoutCellCount(GridLayoutManager) : int
++getDimensionInfo(GridLayoutManager) : DimensionInfo
++getMinimumWidth(int) : int
+#getOriginalCell(GridConstraints) : int
+#getOriginalSpan(GridConstraints) : int
++getPreferredWidth(int) : int
+~getSizePolicy(int) : int
+}
+class com.intellij.uiDesigner.core.LayoutState {
+.. Fields  ..
+-myColumnCount : int
+-myComponents : Component[]
+-myConstraints : GridConstraints[]
+~myMinimumSizes : Dimension[]
+~myPreferredSizes : Dimension[]
+-myRowCount : int
+.. Methods ..
++getColumnCount() : int
++getComponent(int) : Component
++getComponentCount() : int
++getConstraints(int) : GridConstraints
++getRowCount() : int
+}
+abstract class com.intellij.uiDesigner.core.AbstractLayout  <<LayoutManager2>>  {
+.. Fields  ..
+#myComponents : Component[]
+#myConstraints : GridConstraints[]
+-myHGap : int
+#myMargin : Insets
+-myVGap : int
+.. Methods ..
++addLayoutComponent(Component, Object) : void
++addLayoutComponent(String, Component) : void
+~getComponent(int) : Component
+~getComponentCount() : int
+-getComponentIndex(Component) : int
+~getConstraints(int) : GridConstraints
++getConstraintsForComponent(Component) : GridConstraints
++getHGap() : int
++getLayoutAlignmentX(Container) : float
++getLayoutAlignmentY(Container) : float
++getMargin() : Insets
++getVGap() : int
++ {abstract} invalidateLayout(Container) : void
++ {abstract} layoutContainer(Container) : void
++ {abstract} maximumLayoutSize(Container) : Dimension
++ {abstract} minimumLayoutSize(Container) : Dimension
++ {abstract} preferredLayoutSize(Container) : Dimension
++removeLayoutComponent(Component) : void
++setHGap(int) : void
++setMargin(Insets) : void
++setVGap(int) : void
+.. Static ..
+# {static} getHGapImpl() : int
+# {static} getVGapImpl() : int
++ {static} DEFAULT_HGAP : int
++ {static} DEFAULT_VGAP : int
+- {static} COMPONENT_EMPTY_ARRAY : Component[]
+}
+
+}
+com.company.model.Manager o-- "1..1" com.company.model.DataStore
+com.company.model.Manager o-- "1..1" com.company.model.User
+com.company.model.Record o-- "1..1" com.company.model.Category
+com.company.controller.Observable <|.. com.company.view.CreateNewUserDialog
+com.company.view.CreateNewUserDialog *-- "0..*" com.company.controller.Observer
+com.company.model.DataStore <|.. com.company.model.DbDataStorage
+com.company.model.DbDataStorage o-- "1..1" com.company.controller.DbHelper
+com.intellij.uiDesigner.core.DimensionInfo o-- "1..1" com.intellij.uiDesigner.core.LayoutState
+com.company.controller.Observable <|.. com.company.view.MainWindow
+com.company.view.MainWindow *-- "0..*" com.company.controller.Observer
+com.intellij.uiDesigner.core.AbstractLayout <|-- com.intellij.uiDesigner.core.GridLayoutManager
+com.intellij.uiDesigner.core.GridLayoutManager o-- "1..1" com.intellij.uiDesigner.core.LayoutState
+com.intellij.uiDesigner.core.DimensionInfo <|-- com.intellij.uiDesigner.core.HorizontalInfo
+com.company.model.Account *-- "0..*" com.company.model.Record
+com.company.controller.Interacting <|.. com.company.controller.GuiController
+com.company.controller.Observer <|.. com.company.controller.GuiController
+com.company.controller.GuiController o-- "1..1" com.company.model.Manager
+com.company.controller.GuiController o-- "1..1" com.company.view.LoginDialog
+com.company.controller.GuiController o-- "1..1" com.company.view.CreateNewUserDialog
+com.company.controller.GuiController o-- "1..1" com.company.view.MainWindow
+com.company.model.User *-- "0..*" com.company.model.Account
+com.intellij.uiDesigner.core.DimensionInfo <|-- com.intellij.uiDesigner.core.VerticalInfo
+com.intellij.uiDesigner.core.LayoutState *-- "0..*" com.intellij.uiDesigner.core.GridConstraints
+com.intellij.uiDesigner.core.AbstractLayout *-- "0..*" com.intellij.uiDesigner.core.GridConstraints
+com.company.controller.Observable <|.. com.company.view.LoginDialog
+com.company.view.LoginDialog *-- "0..*" com.company.controller.Observer
+com.intellij.uiDesigner.core.GridLayoutManager o-- "2..2" com.intellij.uiDesigner.core.DimensionInfo
+@enduml
